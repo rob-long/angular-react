@@ -5,12 +5,31 @@
     <title>AngularJS and React Integration</title>
   </head>
   <body ng-controller="MainController">
-    <h1>{{ message }}</h1>
-    <react-component 
+
+
+    <div id="angular-app" ng-controller="MainController">
+      <h1>{{ message }}</h1>
+      <h2>{{ sharedState.title }}</h2>
+      <p>{{ sharedState.content }}</p>
+
+
+      <h1>React Component</h1>
+      <react-component 
       data="reactData" 
       shared-text="sharedText"
-    ></react-component>
-    <p>Shared Text from AngularJS: {{ sharedText }}</p>
-    <button ng-click="updateSharedText('Updated text from AngularJS')">Update from AngularJS</button>
+      ></react-component>
+
+
+      <h1>Angular Component</h1>
+      <input type="text" ng-model="sharedState.text" ng-change="updateSharedText(sharedState.text)" />
+      <div>
+        Items:
+        <div ng-repeat="item in sharedState.items track by $index">
+          Item {{$index + 1}}: <input type="number" ng-model="sharedState.items[$index]" ng-change="updateItem($index, sharedState.items[$index])" />
+        </div>
+      </div>
+    </div>
+    
+
   </body>
 </html>

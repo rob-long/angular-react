@@ -34,10 +34,3 @@ class SubjectManager {
 const subjectManager = new SubjectManager();
 export default subjectManager;
 
-// Initialize the shared state
-const initialState = {
-  text: 'Initial text',
-  items: [1, 2, 3]
-};
-
-subjectManager.updateSubject('sharedState', initialState);

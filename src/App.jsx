@@ -35,10 +35,11 @@ const App = ({ data }) => {
     subjectManager.updateSubject('sharedState', newState);
   };
 
-  console.log(sharedStateSubject.items);
+  console.log('here', sharedState.items);
 
   return (
     <div>
+      <p>hi</p>
       <h2>{data.title}</h2>
       <p>{data.content}</p>
       <input
@@ -48,7 +49,7 @@ const App = ({ data }) => {
       />
       <div>
         Items:
-        {sharedState.items.map((item, index) => (
+        {sharedState.items?.map((item, index) => (
           <div key={index}>
             Item {index + 1}: <input
               type="number"

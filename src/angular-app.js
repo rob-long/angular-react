@@ -1,20 +1,47 @@
-// src/angular-app.js
 import angular from 'angular';
+import subjectManager from './subjectManager';
+
+// Initialize the shared state
+const initialState = {
+  text: 'Initial text',
+  items: [1, 2, 3]
+};
+
+subjectManager.updateSubject('sharedState', initialState);
+
+
 
 const app = angular.module('myApp', []);
 
 app.controller('MainController', ['$scope', function ($scope) {
   $scope.message = 'Hello from AngularJS!';
-  $scope.reactData = {
-    title: 'Hello from AngularJS Controller',
-    content: 'This is some data passed from AngularJS to React component.'
-  };
-  $scope.sharedText = 'Initial text from AngularJS';
+  const subjectName = 'sharedState';
+  $scope.sharedState = subjectManager.getCurrentState(subjectName) || { text: '', items: [] };
 
-  $scope.updateSharedText = function(newText) {
-    $scope.sharedText = newText;
-    window.sharedTextSubject.next(newText);
+  // Subscribe to changes in the shared state
+  const subscription = subjectManager.getSubject(subjectName).subscribe((state) => {
+    if (state !== null) {
+      $scope.$applyAsync(() => {
+        $scope.sharedState = state;
+      });
+    }
+  });
+
+  // Clean up subscription on scope destroy
+  $scope.$on('$destroy', () => {
+    subscription.unsubscribe();
+  });
+
+  // Function to update the shared state
+  $scope.updateSharedText = (newText) => {
+    const newState = { ...$scope.sharedState, text: newText };
+    subjectManager.updateSubject(subjectName, newState);
+  };
+
+  $scope.updateItem = (index, newValue) => {
+    const newItems = [...$scope.sharedState.items];
+    newItems[index] = newValue;
+    const newState = { ...$scope.sharedState, items: newItems };
+    subjectManager.updateSubject(subjectName, newState);
   };
 }]);
-
-export default app;
