@@ -12,9 +12,8 @@
   "license": "ISC",
   "dependencies": {
     "@babel/preset-typescript": "^7.24.7",
+    "@mavrck-inc/react-modules": "file:../../mavrck-inc-react-modules-0.7.17.tgz",
     "angular": "^1.6.9",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
     "rxjs": "^7.8.1"
   },
   "devDependencies": {

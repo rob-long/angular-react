@@ -1,5 +1,13 @@
 import angular from 'angular';
+
 import AppBridge from './AppBridge';
+import { WebGreeting, WebInviteController} from '@mavrck-inc/react-modules';
+
+if (!customElements.get('web-greeting')) {
+  customElements.define('web-greeting', WebGreeting);
+  customElements.define('web-invite-controller', WebInviteController);
+}
+
 
 // Define the initial state
 interface IState {
@@ -40,6 +48,16 @@ app.controller('MainController', ['$scope', function ($scope: IMainControllerSco
     if (state !== null) {
       $scope.$applyAsync(() => {
         $scope.sharedState = state;
+        $scope.message = state.text;
+      });
+    }
+  }});
+
+  // Subscribe to changes from react-modules web component
+  const sharedInviteSubject = AppBridge.subscribe<IState>('sharedInvite', {next: (state) => {
+    if (state !== null) {
+      $scope.$applyAsync(() => {
+        $scope.message = state.text;
       });
     }
   }});
@@ -54,6 +72,7 @@ app.controller('MainController', ['$scope', function ($scope: IMainControllerSco
     try {
       const newState = { ...$scope.sharedState, text: newText };
       AppBridge.updateSubject(subjectName, newState);
+      $scope.message = newText;
     } catch (error) {
       console.error('Error updating shared text:', error);
     }

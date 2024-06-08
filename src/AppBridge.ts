@@ -21,6 +21,7 @@ class AppBridge {
   }
 
   updateSubject<T>(name: string, newState: T): void {
+    console.log('updating', name, newState);
     if (!window._subjectManager[name]) {
       window._subjectManager[name] = new BehaviorSubject<T>(newState);
     } else {
