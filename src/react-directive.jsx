@@ -2,7 +2,7 @@ import angular from 'angular';
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App';
-import subjectManager from './AppBridge';
+import AppBridge from './AppBridge';
 
 angular.module('myApp').directive('reactComponent', function () {
   return {
@@ -23,8 +23,8 @@ angular.module('myApp').directive('reactComponent', function () {
         root.unmount();
       });
 
-      // Use subjectManager to subscribe to changes
-      const sharedStateSubject = subjectManager.getSubject('sharedState');
+      // Use AppBridge to subscribe to changes
+      const sharedStateSubject = AppBridge.getSubject('sharedState');
 
       const subscription = sharedStateSubject.subscribe((newState) => {
         if (newState !== null) {

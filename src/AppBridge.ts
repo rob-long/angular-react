@@ -1,4 +1,4 @@
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subscription } from 'rxjs';
 
 interface WindowWithSubjectManager extends Window {
   _subjectManager: Record<string, BehaviorSubject<any>>;
@@ -24,16 +24,28 @@ class AppBridge {
     if (!window._subjectManager[name]) {
       window._subjectManager[name] = new BehaviorSubject<T>(newState);
     } else {
-      window._subjectManager[name].next(newState);
+      this.getSubject(name).next(newState);
     }
   }
 
   getValue<T>(name: string): T | null {
-    if (window._subjectManager[name]) {
-      return window._subjectManager[name].getValue();
-    }
-    return null;
+    const subject = this.getSubject<T>(name);
+    return subject.getValue();
   }
+
+  subscribe<T>(name: string, observer: {
+    next?: (value: T | null) => void,
+    error?: (error: any) => void,
+    complete?: () => void
+  }): Subscription {
+    try {
+      return this.getSubject<T>(name).subscribe(observer);
+    } catch (err) {
+      console.error(`Error subscribing to subject ${name}:`, err);
+      if (observer.error) observer.error(err);
+      throw err; // Re-throw to ensure the caller knows something went wrong
+    }
+  }  
 }
 
 const Singleton = new AppBridge();

@@ -6,13 +6,12 @@ angular.module('myApp').factory('AppBridgeService', ['$rootScope', function($roo
     getSubject: <T>(name: string) => AppBridge.getSubject<T>(name),
     getValue: <T>(name: string) => AppBridge.getValue<T>(name),
     updateSubject: <T>(name: string, newState: T) => AppBridge.updateSubject<T>(name, newState),
-    subscribe: <T>(name: string, callback: (newState: T) => void) => {
-      const subject = AppBridge.getSubject<T>(name);
-      const subscription = subject.subscribe((newState) => {
+    subscribe: <T>(name: string, next: (newState: T) => void) => {
+      const subscription = AppBridge.subscribe(name, {next: (newState) => {
         $rootScope.$apply(() => {
-          callback(newState as T);
+          next(newState as T);
         });
-      });
+      }});
       return () => subscription.unsubscribe();
     }
   };

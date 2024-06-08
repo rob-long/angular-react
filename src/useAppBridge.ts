@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react';
+import type { SetStateAction } from 'react';
 import AppBridge from './AppBridge';
 
 const useAppBridge = <T>(subjectName: string) => {
   const [state, setState] = useState<T | null>(AppBridge.getValue<T>(subjectName));
 
   useEffect(() => {
-    const subject = AppBridge.getSubject<T>(subjectName);
-    const subscription = subject.subscribe((newState) => {
+    const subscription = AppBridge.subscribe(subjectName, {next: (newState: SetStateAction<T | null>) => {
       setState(newState);
-    });
+    }});
 
     return () => {
       subscription.unsubscribe();

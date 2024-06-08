@@ -27,16 +27,22 @@ interface IMainControllerScope extends angular.IScope {
 app.controller('MainController', ['$scope', function ($scope: IMainControllerScope) {
   $scope.message = 'Hello from AngularJS!';
   const subjectName = 'sharedState';
-  $scope.sharedState = AppBridge.getValue<IState>(subjectName) || { text: '', items: [] };
+
+  try {
+    $scope.sharedState = AppBridge.getValue<IState>(subjectName) || { text: '', items: [] };
+  } catch (error) {
+    console.error('Error fetching initial state:', error);
+    $scope.sharedState = { text: '', items: [] };
+  }
 
   // Subscribe to changes in the shared state
-  const sharedStateSubject = AppBridge.getSubject<IState>(subjectName).subscribe((state) => {
+  const sharedStateSubject = AppBridge.subscribe<IState>(subjectName, {next: (state) => {
     if (state !== null) {
       $scope.$applyAsync(() => {
         $scope.sharedState = state;
       });
     }
-  });
+  }});
 
   // Clean up subscription on scope destroy
   $scope.$on('$destroy', () => {
@@ -45,14 +51,22 @@ app.controller('MainController', ['$scope', function ($scope: IMainControllerSco
 
   // Function to update the shared state
   $scope.updateSharedText = (newText: string) => {
-    const newState = { ...$scope.sharedState, text: newText };
-    AppBridge.updateSubject(subjectName, newState);
+    try {
+      const newState = { ...$scope.sharedState, text: newText };
+      AppBridge.updateSubject(subjectName, newState);
+    } catch (error) {
+      console.error('Error updating shared text:', error);
+    }
   };
 
   $scope.updateItem = (index: number, newValue: number) => {
-    const newItems = [...$scope.sharedState.items];
-    newItems[index] = newValue;
-    const newState = { ...$scope.sharedState, items: newItems };
-    AppBridge.updateSubject(subjectName, newState);
+    try {
+      const newItems = [...$scope.sharedState.items];
+      newItems[index] = newValue;
+      const newState = { ...$scope.sharedState, items: newItems };
+      AppBridge.updateSubject(subjectName, newState);
+    } catch (error) {
+      console.error('Error updating item:', error);
+    }
   };
 }]);
