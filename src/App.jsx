@@ -1,27 +1,41 @@
-// src/App.jsx
 import React, { useEffect, useState } from 'react';
+import subjectManager from './subjectManager';
 
-const App = ({ data, initialSharedText }) => {
-  const [sharedText, setSharedText] = useState(initialSharedText);
+const App = ({ data }) => {
+  const [sharedState, setSharedState] = useState(data);
 
   useEffect(() => {
     console.log('Received data:', data);
-  }, [data]);
+    const sharedStateSubject = subjectManager.getSubject('sharedState');
 
-  useEffect(() => {
-    const subscription = window.sharedTextSubject.subscribe((newText) => {
-      setSharedText(newText);
+    const subscription = sharedStateSubject.subscribe((newState) => {
+      if (newState !== null) {
+        setSharedState(newState);
+      }
     });
 
     return () => {
       subscription.unsubscribe();
     };
-  }, []);
+  }, [data]);
 
-  const handleChange = (event) => {
-    setSharedText(event.target.value);
-    window.sharedTextSubject.next(event.target.value);
+  const handleTextChange = (event) => {
+    const newText = event.target.value;
+    const newState = { ...sharedState, text: newText };
+    setSharedState(newState);
+    subjectManager.updateSubject('sharedState', newState);
   };
+
+  const handleItemChange = (index, event) => {
+    const newValue = parseInt(event.target.value, 10);
+    const newItems = [...sharedState.items];
+    newItems[index] = newValue;
+    const newState = { ...sharedState, items: newItems };
+    setSharedState(newState);
+    subjectManager.updateSubject('sharedState', newState);
+  };
+
+  console.log(sharedStateSubject.items);
 
   return (
     <div>
@@ -29,9 +43,21 @@ const App = ({ data, initialSharedText }) => {
       <p>{data.content}</p>
       <input
         type="text"
-        value={sharedText}
-        onChange={handleChange}
+        value={sharedState.text}
+        onChange={handleTextChange}
       />
+      <div>
+        Items:
+        {sharedState.items.map((item, index) => (
+          <div key={index}>
+            Item {index + 1}: <input
+              type="number"
+              value={item}
+              onChange={(e) => handleItemChange(index, e)}
+            />
+          </div>
+        ))}
+      </div>
     </div>
   );
 };

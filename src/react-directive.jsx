@@ -1,21 +1,20 @@
-// src/react-directive.jsx
 import angular from 'angular';
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App.jsx';
+import subjectManager from './subjectManager.js';
 
 angular.module('myApp').directive('reactComponent', function () {
   return {
     restrict: 'E',
     scope: {
-      data: '=',
-      sharedText: '='
+      data: '='
     },
     link: function (scope, element) {
       const root = createRoot(element[0]);
 
       const ReactWrapper = () => {
-        return <App data={scope.data} initialSharedText={scope.sharedText} />;
+        return <App data={scope.data} />;
       };
 
       root.render(<ReactWrapper />);
@@ -24,10 +23,15 @@ angular.module('myApp').directive('reactComponent', function () {
         root.unmount();
       });
 
-      const subscription = window.sharedTextSubject.subscribe((newText) => {
-        scope.$applyAsync(() => {
-          scope.sharedText = newText;
-        });
+      // Use subjectManager to subscribe to changes
+      const sharedStateSubject = subjectManager.getSubject('sharedState');
+
+      const subscription = sharedStateSubject.subscribe((newState) => {
+        if (newState !== null) {
+          scope.$applyAsync(() => {
+            scope.data = newState;
+          });
+        }
       });
 
       scope.$on('$destroy', () => {
