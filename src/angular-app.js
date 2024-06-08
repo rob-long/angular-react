@@ -1,5 +1,5 @@
 import angular from 'angular';
-import subjectManager from './subjectManager';
+import subjectManager from './AppBridge';
 
 // Initialize the shared state
 const initialState = {
@@ -16,7 +16,7 @@ const app = angular.module('myApp', []);
 app.controller('MainController', ['$scope', function ($scope) {
   $scope.message = 'Hello from AngularJS!';
   const subjectName = 'sharedState';
-  $scope.sharedState = subjectManager.getCurrentState(subjectName) || { text: '', items: [] };
+  $scope.sharedState = subjectManager.getValue(subjectName) || { text: '', items: [] };
 
   // Subscribe to changes in the shared state
   const subscription = subjectManager.getSubject(subjectName).subscribe((state) => {

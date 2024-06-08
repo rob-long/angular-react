@@ -2,7 +2,7 @@ import angular from 'angular';
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App.jsx';
-import subjectManager from './subjectManager.js';
+import subjectManager from './AppBridge';
 
 angular.module('myApp').directive('reactComponent', function () {
   return {

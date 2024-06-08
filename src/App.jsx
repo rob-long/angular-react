@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import subjectManager from './subjectManager';
+import subjectManager from './AppBridge';
 
 const App = ({ data }) => {
   const [sharedState, setSharedState] = useState(data);
@@ -35,7 +35,7 @@ const App = ({ data }) => {
     subjectManager.updateSubject('sharedState', newState);
   };
 
-  console.log('here', sharedState.items);
+  console.log('here', sharedState);
 
   return (
     <div>
