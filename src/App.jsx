@@ -1,7 +1,12 @@
 import React from 'react';
 
-const App = () => {
-  return <div>Hello from React!</div>;
+const App = ({ data }) => {
+  return (
+    <div>
+      <h2>{data.title}</h2>
+      <p>{data.content}</p>
+    </div>
+  );
 };
 
 export default App;
