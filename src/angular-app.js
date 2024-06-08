@@ -1,3 +1,4 @@
+// src/angular-app.js
 import angular from 'angular';
 
 const app = angular.module('myApp', []);
@@ -8,7 +9,12 @@ app.controller('MainController', ['$scope', function ($scope) {
     title: 'Hello from AngularJS Controller',
     content: 'This is some data passed from AngularJS to React component.'
   };
-  console.log($scope);
+  $scope.sharedText = 'Initial text from AngularJS';
+
+  $scope.updateSharedText = function(newText) {
+    $scope.sharedText = newText;
+    window.sharedTextSubject.next(newText);
+  };
 }]);
 
 export default app;

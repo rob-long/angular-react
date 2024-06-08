@@ -1,0 +1,1 @@
+console.log("setupGlobalSubject.js loaded and executing");

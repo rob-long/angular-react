@@ -1,3 +1,4 @@
+// src/react-directive.jsx
 import angular from 'angular';
 import React from 'react';
 import { createRoot } from 'react-dom/client';
@@ -7,21 +8,30 @@ angular.module('myApp').directive('reactComponent', function () {
   return {
     restrict: 'E',
     scope: {
-      data: '='
+      data: '=',
+      sharedText: '='
     },
     link: function (scope, element) {
-      console.log(scope);
       const root = createRoot(element[0]);
 
-      // Watch for changes to data and re-render React component
-      scope.$watch('data', function (newValue) {
-        if (newValue) {
-          root.render(<App data={newValue} />);
-        }
-      });
+      const ReactWrapper = () => {
+        return <App data={scope.data} initialSharedText={scope.sharedText} />;
+      };
+
+      root.render(<ReactWrapper />);
 
       scope.$on('$destroy', () => {
         root.unmount();
+      });
+
+      const subscription = window.sharedTextSubject.subscribe((newText) => {
+        scope.$applyAsync(() => {
+          scope.sharedText = newText;
+        });
+      });
+
+      scope.$on('$destroy', () => {
+        subscription.unsubscribe();
       });
     },
   };
