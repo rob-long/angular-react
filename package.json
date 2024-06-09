@@ -5,8 +5,9 @@
   "main": "index.js",
   "scripts": {
     "build": "npm run test-token && webpack --mode production",
-    "start": "webpack serve --mode development",
-    "test-token": "echo \"GITHUB_TOKEN=${GITHUB_TOKEN}\" && npm whoami --registry=https://npm.pkg.github.com"
+    "dev": "webpack serve --mode development",
+    "test-token": "echo \"GITHUB_TOKEN is: $GITHUB_TOKEN\" && cat .npmrc && npm whoami --registry=https://npm.pkg.github.com || (echo 'Failed to authenticate with GitHub Packages' && exit 1)",
+    "start": "http-server ./dist -o"
   },
   "husky": {
     "hooks": {
@@ -30,6 +31,7 @@
     "@mavrck-inc/react-modules": "file:mavrck-inc-react-modules-0.7.17.tgz",
     "@rob-long/app-bridge": "^0.0.4",
     "angular": "^1.6.9",
+    "http-server": "^14.1.1",
     "install": "^0.13.0",
     "npm": "^10.8.1",
     "rxjs": "^7.8.1"
