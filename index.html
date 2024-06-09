@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+  <head>
+    <meta charset="UTF-8">
+    <title>Later Influence App Sandbox</title>
+    <link rel="stylesheet" href="https://later-frontend-assets.later.com/assets/later-base.css">
+    <style>
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        overflow-y: auto;
+      }
+      #container {
+        padding: 20px;
+      }
+      .angular-app {
+        margin-top: 20px;
+        padding: 20px;
+        border: 5px solid red;
+      }
+      .react-app {
+        margin-top: 20px;
+        padding: 20px;
+        border: 5px solid blue;
+      }
+      .web-component {
+        margin-top: 20px;
+        padding: 20px;
+        border: 5px solid green;
+      }
+
+      .legend {
+            font-family: Arial, sans-serif;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .swatch {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+        }
+        .swatch-red {
+            background-color: red;
+        }
+        .swatch-green {
+            background-color: green;
+        }
+        .swatch-blue {
+            background-color: blue;
+        }      
+      
+    </style>
+  </head>
+  <body ng-controller="MainController">
+    <div id="container">
+    <h1>Later Influence - Simulating S4</h1>
+    <p>
+      Because all of these apps(Angular 1.6, React 18 and React 18 as web components) are not bundled together using a bundler, they CANNOT communicate as regular modules.  They need an event bus or attached to the global scope.  
+      Event listeners, custom events, RxJS and preact/signals were all investigated.  RxJS (which actually comes with Angular) was the clear winner. As the "lodash of events", 
+      it's a powerful tool that we're only using a small fraction of in this demo.  Thus it provides room for solving other types of problems in the future.
+    </p>
+    <div class="legend">
+      <div class="legend-item">
+          <div class="swatch swatch-red"></div>
+          <span>Red: Angular</span>
+      </div>
+      <div class="legend-item">
+          <div class="swatch swatch-green"></div>
+          <span>Green: React modules JIT transform to Web Component</span>
+      </div>
+      <div class="legend-item">
+          <div class="swatch swatch-blue"></div>
+          <span>Blue: React</span>
+      </div>
+  </div>    
+    <div class="angular-app" ng-controller="MainController">
+      <h1>{{ message }}</h1>
+      <h2>{{ sharedState.title }}</h2>
+      <p>{{ sharedState.content }}</p>
+
+
+      <div class="react-app">
+      <react-component 
+      data="reactData" 
+      shared-text="sharedText"
+      >
+      </react-component>
+      </div>
+
+
+      <div class="angular-app">
+      <input type="text" ng-model="sharedState.text" ng-change="updateSharedText(sharedState.text)" />
+
+        Items:
+        <div ng-repeat="item in sharedState.items track by $index">
+          Item {{$index + 1}}: <input type="number" ng-model="sharedState.items[$index]" ng-change="updateItem($index, sharedState.items[$index])" />
+        </div>
+      </div>
+
+      <div class="web-component">
+      <web-greeting name={{message}}></web-greeting>
+      </div>
+      <div class="web-component">
+      <web-invite-controller></web-invite-controller>
+      </div>
+      </div>
+
+
+      <div id="react-root"></div>
+    </div>
+    
+    </div>
+  </body>
+</html>
