@@ -59,9 +59,9 @@
     <div id="container">
     <h1>Later Influence - Simulating S4</h1>
     <p>
-      Because all of these apps(Angular 1.6, React 18 and React 18 as web components) are not bundled together using a bundler, they CANNOT communicate as regular modules.  They need an event bus or attached to the global scope.  
-      Event listeners, custom events, RxJS and preact/signals were all investigated.  RxJS (which actually comes with Angular) was the clear winner. As the "lodash of events", 
-      it's a powerful tool that we're only using a small fraction of in this demo.  Thus it provides room for solving other types of problems in the future.
+      This is a sandbox for testing the integration of Angular, React, and Web Components.
+      It demonstrates how the <a href="https://github.com/rob-long/app-bridge" target="_blank">App Bridge</a> can enable 2-way binded communication between Angular, React, and Web Components in a single application by any codebase that imports it.
+      It simulates how S4 is setup by having Angular as the main application and React as a injected secondary application.
     </p>
     <div class="legend">
       <div class="legend-item">

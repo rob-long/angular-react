@@ -4,10 +4,9 @@
   "description": "A package for integrating AngularJS with React",
   "main": "index.js",
   "scripts": {
-    "build": "npm run test-token && webpack --mode production",
+    "build": "webpack --mode production",
     "dev": "webpack serve --mode development",
-    "test-token": "echo \"GITHUB_TOKEN is: $GITHUB_TOKEN\" && cat .npmrc && npm whoami --registry=https://npm.pkg.github.com || (echo 'Failed to authenticate with GitHub Packages' && exit 1)",
-    "start": "http-server ./dist -o"
+    "start": "http-server ./dist -p 80"
   },
   "husky": {
     "hooks": {
@@ -28,12 +27,11 @@
   "author": "Robert Long",
   "license": "ISC",
   "dependencies": {
+    "react": "^18.1.0",
+    "react-dom": "^18.1.0",
     "@mavrck-inc/react-modules": "file:mavrck-inc-react-modules-0.7.17.tgz",
     "@rob-long/app-bridge": "^0.0.4",
     "angular": "^1.6.9",
-    "http-server": "^14.1.1",
-    "install": "^0.13.0",
-    "npm": "^10.8.1",
     "rxjs": "^7.8.1"
   },
   "devDependencies": {
@@ -55,7 +53,10 @@
     "typescript": "^5.4.5",
     "webpack": "^5.91.0",
     "webpack-cli": "^5.1.4",
-    "webpack-dev-server": "^5.0.4"
+    "webpack-dev-server": "^5.0.4",
+    "http-server": "^14.1.1",
+    "install": "^0.13.0",
+    "npm": "^10.8.1"
   },
   "repository": {
     "type": "git",

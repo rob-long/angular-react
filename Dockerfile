@@ -18,5 +18,14 @@ COPY . .
 # Install dependencies
 RUN npm install
 
+# Build the application
+RUN npm run build
+
+# Expose port 80
+EXPOSE 80
+
+# Remove the .npmrc file
+RUN rm .npmrc
+
 # Start the application
 CMD ["npm", "start"]
