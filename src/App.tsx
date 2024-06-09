@@ -1,8 +1,10 @@
 import React from 'react';
-import useAppBridge from './useAppBridge';
+import { useAppBridge } from '@rob-long/app-bridge';
 
 const App: React.FC = () => {
-  const [state, updateState] = useAppBridge<{ text: string; items: number[] }>('sharedState');
+  const [state, updateState] = useAppBridge<{ text: string; items: number[] }>(
+    'sharedState',
+  );
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (state) {
@@ -10,7 +12,10 @@ const App: React.FC = () => {
     }
   };
 
-  const handleItemChange = (index: number, event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleItemChange = (
+    index: number,
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
     if (state) {
       const newItems = [...state.items];
       newItems[index] = parseInt(event.target.value, 10);
@@ -23,16 +28,13 @@ const App: React.FC = () => {
   return (
     <div>
       <p>Shared Text: {state.text}</p>
-      <input
-        type="text"
-        value={state.text}
-        onChange={handleChange}
-      />
+      <input type="text" value={state.text} onChange={handleChange} />
       <div>
         Items:
         {state.items?.map((item, index) => (
           <div key={index}>
-            Item {index + 1}: <input
+            Item {index + 1}:{' '}
+            <input
               type="number"
               value={item || undefined}
               onChange={(e) => handleItemChange(index, e)}

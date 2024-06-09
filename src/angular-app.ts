@@ -1,8 +1,7 @@
 import angular from 'angular';
 
-import AppBridge from './AppBridge';
+import { AppBridge } from '@rob-long/app-bridge';
 import { WebGreeting, WebInviteController } from '@mavrck-inc/react-modules';
-import { hello } from '@rob-long/rollup-init';
 
 if (!customElements.get('web-greeting')) {
   customElements.define('web-greeting', WebGreeting);

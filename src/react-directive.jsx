@@ -2,13 +2,13 @@ import angular from 'angular';
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App';
-import AppBridge from './AppBridge';
+import { AppBridge } from '@rob-long/app-bridge';
 
 angular.module('myApp').directive('reactComponent', function () {
   return {
     restrict: 'E',
     scope: {
-      data: '='
+      data: '=',
     },
     link: function (scope, element) {
       const root = createRoot(element[0]);
