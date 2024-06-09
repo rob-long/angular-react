@@ -1,11 +1,12 @@
 {
   "name": "@rob-long/angular-react",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A package for integrating AngularJS with React",
   "main": "index.js",
   "scripts": {
-    "build": "webpack --mode production",
-    "start": "webpack serve --mode development"
+    "build": "npm run test-token && webpack --mode production",
+    "start": "webpack serve --mode development",
+    "test-token": "echo \"GITHUB_TOKEN=${GITHUB_TOKEN}\" && npm whoami --registry=https://npm.pkg.github.com"
   },
   "husky": {
     "hooks": {
@@ -27,7 +28,7 @@
   "license": "ISC",
   "dependencies": {
     "@mavrck-inc/react-modules": "file:mavrck-inc-react-modules-0.7.17.tgz",
-    "@rob-long/app-bridge": "^0.0.3",
+    "@rob-long/app-bridge": "^0.0.4",
     "angular": "^1.6.9",
     "install": "^0.13.0",
     "npm": "^10.8.1",
@@ -59,6 +60,7 @@
     "url": "https://github.com/rob-long/angular-react.git"
   },
   "publishConfig": {
+    "access": "public",
     "registry": "https://npm.pkg.github.com/"
   }
 }
