@@ -24,7 +24,7 @@
         padding: 20px;
         border: 5px solid blue;
       }
-      #web-component {
+      .web-component {
         margin-top: 20px;
         padding: 20px;
         border: 5px solid green;
@@ -56,7 +56,6 @@
 
 
       <h1>Angular Component</h1>
-      <h4>One-way binding</h4>
       <input type="text" ng-model="sharedState.text" ng-change="updateSharedText(sharedState.text)" />
       <div>
         Items:
@@ -67,9 +66,12 @@
 
 
       <h1>react-module wrapped as Web Component</h1>
-      <div id="web-component">
+      <div class="web-component">
       <web-greeting name={{message}}></web-greeting>
+      </div>
+      <div class="web-component">
       <web-invite-controller></web-invite-controller>
+      </div>
       </div>
 
 

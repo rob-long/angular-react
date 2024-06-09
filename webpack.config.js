@@ -27,7 +27,22 @@ module.exports = {
             ]
           }
         }
-      }
+      },
+      {
+        test: /\.css$/, // Add CSS support
+        use: ['style-loader', 'css-loader'] // Use style-loader and css-loader
+      },
+      {
+        test: /\.(png|svg|jpg|jpeg|gif)$/, // Add support for image files
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              name: '[path][name].[ext]',
+            },
+          },
+        ],
+      },
     ]
   },
   resolve: {
