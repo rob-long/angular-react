@@ -14,12 +14,12 @@
       #container {
         padding: 20px;
       }
-      #angular-app {
+      .angular-app {
         margin-top: 20px;
         padding: 20px;
         border: 5px solid red;
       }
-      #react-app {
+      .react-app {
         margin-top: 20px;
         padding: 20px;
         border: 5px solid blue;
@@ -29,6 +29,30 @@
         padding: 20px;
         border: 5px solid green;
       }
+
+      .legend {
+            font-family: Arial, sans-serif;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .swatch {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+        }
+        .swatch-red {
+            background-color: red;
+        }
+        .swatch-green {
+            background-color: green;
+        }
+        .swatch-blue {
+            background-color: blue;
+        }      
+      
     </style>
   </head>
   <body ng-controller="MainController">
@@ -39,14 +63,27 @@
       Event listeners, custom events, RxJS and preact/signals were all investigated.  RxJS (which actually comes with Angular) was the clear winner. As the "lodash of events", 
       it's a powerful tool that we're only using a small fraction of in this demo.  Thus it provides room for solving other types of problems in the future.
     </p>
-    <div id="angular-app" ng-controller="MainController">
+    <div class="legend">
+      <div class="legend-item">
+          <div class="swatch swatch-red"></div>
+          <span>Red: Angular</span>
+      </div>
+      <div class="legend-item">
+          <div class="swatch swatch-green"></div>
+          <span>Green: React modules JIT transform to Web Component</span>
+      </div>
+      <div class="legend-item">
+          <div class="swatch swatch-blue"></div>
+          <span>Blue: React</span>
+      </div>
+  </div>    
+    <div class="angular-app" ng-controller="MainController">
       <h1>{{ message }}</h1>
       <h2>{{ sharedState.title }}</h2>
       <p>{{ sharedState.content }}</p>
 
 
-      <h1>React Component</h1>
-      <div id="react-app">
+      <div class="react-app">
       <react-component 
       data="reactData" 
       shared-text="sharedText"
@@ -55,17 +92,15 @@
       </div>
 
 
-      <h1>Angular Component</h1>
+      <div class="angular-app">
       <input type="text" ng-model="sharedState.text" ng-change="updateSharedText(sharedState.text)" />
-      <div>
+
         Items:
         <div ng-repeat="item in sharedState.items track by $index">
           Item {{$index + 1}}: <input type="number" ng-model="sharedState.items[$index]" ng-change="updateItem($index, sharedState.items[$index])" />
         </div>
       </div>
 
-
-      <h1>react-module wrapped as Web Component</h1>
       <div class="web-component">
       <web-greeting name={{message}}></web-greeting>
       </div>
