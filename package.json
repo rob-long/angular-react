@@ -28,7 +28,7 @@
   "license": "ISC",
   "dependencies": {
     "@mavrck-inc/react-modules": "file:mavrck-inc-react-modules-0.7.17.tgz",
-    "@rob-long/app-bridge": "^1.0.0",
+    "@rob-long/app-bridge": "^1.1.0",
     "angular": "^1.6.9",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
