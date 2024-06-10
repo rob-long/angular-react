@@ -1,10 +1,12 @@
 import React from 'react';
 import { useAppBridge } from '@rob-long/app-bridge';
+import { S4SubjectEntries } from './angular-app';
+
+// Pick the `sharedState` property from `S4SubjectEntries`
+type PickedSharedState = Pick<S4SubjectEntries, 'sharedState'>;
 
 const App: React.FC = () => {
-  const [state, updateState] = useAppBridge<{ text: string; items: number[] }>(
-    'sharedState',
-  );
+  const [state, updateState] = useAppBridge<PickedSharedState>('sharedState');
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (state) {
@@ -33,7 +35,7 @@ const App: React.FC = () => {
         Items:
         {state.items?.map((item, index) => (
           <div key={index}>
-            Item {index + 1}:{' '}
+            Number {index + 1}:{' '}
             <input
               type="number"
               value={item || undefined}

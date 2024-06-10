@@ -1,6 +1,6 @@
 import angular from 'angular';
 
-import { AppBridge } from '@rob-long/app-bridge';
+import { createAppBridge } from '@rob-long/app-bridge';
 import { WebGreeting, WebInviteController } from '@mavrck-inc/react-modules';
 
 if (!customElements.get('web-greeting')) {
@@ -20,7 +20,13 @@ const initialState: IState = {
   items: [1, 2, 3],
 };
 
-AppBridge.updateSubject<IState>('sharedState', initialState);
+export interface S4SubjectEntries {
+  sharedState: IState | null;
+  sharedInvite: { text: string } | null;
+}
+
+const appBridge = createAppBridge<S4SubjectEntries>();
+appBridge.updateSubject('sharedState', initialState);
 
 const app = angular.module('myApp', []);
 
@@ -37,7 +43,7 @@ app.controller('MainController', [
     const subjectName = 'sharedState';
 
     try {
-      $scope.sharedState = AppBridge.getValue<IState>(subjectName) || {
+      $scope.sharedState = appBridge.getValue(subjectName) || {
         text: '',
         items: [],
       };
@@ -47,7 +53,7 @@ app.controller('MainController', [
     }
 
     // Subscribe to changes in the shared state
-    const sharedStateSubject = AppBridge.subscribe<IState>(subjectName, {
+    const sharedStateSubject = appBridge.subscribe(subjectName, {
       next: (state) => {
         if (state !== null) {
           $scope.$applyAsync(() => {
@@ -59,7 +65,7 @@ app.controller('MainController', [
     });
 
     // Subscribe to changes from react-modules web component
-    const sharedInviteSubject = AppBridge.subscribe<IState>('sharedInvite', {
+    const sharedInviteSubject = appBridge.subscribe('sharedInvite', {
       next: (state) => {
         if (state !== null) {
           $scope.$applyAsync(() => {
@@ -78,7 +84,7 @@ app.controller('MainController', [
     $scope.updateSharedText = (newText: string) => {
       try {
         const newState = { ...$scope.sharedState, text: newText };
-        AppBridge.updateSubject(subjectName, newState);
+        appBridge.updateSubject(subjectName, newState);
         $scope.message = newText;
       } catch (error) {
         console.error('Error updating shared text:', error);
@@ -90,7 +96,7 @@ app.controller('MainController', [
         const newItems = [...$scope.sharedState.items];
         newItems[index] = newValue;
         const newState = { ...$scope.sharedState, items: newItems };
-        AppBridge.updateSubject(subjectName, newState);
+        appBridge.updateSubject(subjectName, newState);
       } catch (error) {
         console.error('Error updating item:', error);
       }

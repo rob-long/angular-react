@@ -2,7 +2,7 @@ import angular from 'angular';
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App';
-import { AppBridge } from '@rob-long/app-bridge';
+import { createAppBridge } from '@rob-long/app-bridge';
 
 angular.module('myApp').directive('reactComponent', function () {
   return {
@@ -24,7 +24,8 @@ angular.module('myApp').directive('reactComponent', function () {
       });
 
       // Use AppBridge to subscribe to changes
-      const sharedStateSubject = AppBridge.getSubject('sharedState');
+      const appBridge = createAppBridge();
+      const sharedStateSubject = appBridge.getSubject('sharedState');
 
       const subscription = sharedStateSubject.subscribe((newState) => {
         if (newState !== null) {
