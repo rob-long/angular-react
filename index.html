@@ -102,8 +102,8 @@
       <h2>{{ sharedState.title }}</h2>
       <p>{{ sharedState.content }}</p>
 
-      <div>Date Picker:</div>
-      <web-date-picker ></web-date-picker>
+      <div>Date Range: {{dateRange}}</div>
+      <web-date-range></web-date-range>
 
 
 
@@ -123,11 +123,6 @@
               ng-change="updateItem($index, sharedState.items[$index])" />
           </div>
         </div>
-
-        <div>Dates Selected so far</div>
-        <ul>
-          <li ng-repeat="item in datesSelected">{{ item }}</li>
-        </ul>
 
         <div class="web-component">
           <web-greeting name={{message}}></web-greeting>

@@ -1,4 +1,3 @@
-import { AppBridge } from '@rob-long/app-bridge';
 import './angular-app';
 import './react-directive';
 
@@ -13,7 +12,7 @@ if (reactRoot) {
   const root = createRoot(reactRoot);
   root.render(
     <>
-      <div class="react-app">
+      <div className="react-app">
         <InviteController />
       </div>
     </>,

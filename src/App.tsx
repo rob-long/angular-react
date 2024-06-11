@@ -1,7 +1,6 @@
 import React from 'react';
 import { useAppBridge } from '@rob-long/app-bridge';
 import { S4SubjectEntries } from './angular-app';
-import { WebDatePicker } from '@mavrck-inc/react-modules';
 
 // Pick the `sharedState` property from `S4SubjectEntries`
 type PickedSharedState = Pick<S4SubjectEntries, 'sharedState'>;

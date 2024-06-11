@@ -4,32 +4,31 @@ import {
   WebGreeting,
   WebInviteController,
   WebDatePicker,
+  WebDateRange,
 } from '@mavrck-inc/react-modules';
 
 if (!customElements.get('web-greeting')) {
   customElements.define('web-greeting', WebGreeting);
   customElements.define('web-invite-controller', WebInviteController);
-}
-
-if (!customElements.get('web-date-picker')) {
   customElements.define('web-date-picker', WebDatePicker);
+  customElements.define('web-date-range', WebDateRange);
 }
 
-// Define the initial state
 interface IState {
   text: string;
   items: number[];
-}
-
-export interface S4SubjectEntries {
-  sharedState: IState | null;
-  sharedInvite: { text: string } | null;
 }
 
 const initialState: IState = {
   text: 'Initial text',
   items: [1, 2, 3],
 };
+
+export interface S4SubjectEntries {
+  sharedState: IState | null;
+  sharedInvite: { text: string } | null;
+  sharedDateRange: { start: string; end: string } | null;
+}
 
 const appBridge = createAppBridge<S4SubjectEntries>();
 appBridge.updateSubject('sharedState', initialState);
@@ -41,8 +40,7 @@ interface IMainControllerScope extends angular.IScope {
   sharedState: IState;
   updateSharedText: (newText: string) => void;
   updateItem: (index: number, newValue: number) => void;
-  onDateChange: (date: string) => void;
-  datesSelected: string[];
+  dateRange: string;
 }
 
 app.controller('MainController', [
@@ -60,7 +58,6 @@ app.controller('MainController', [
       $scope.sharedState = { text: '', items: [] };
     }
 
-    // Subscribe to changes in the shared state
     const sharedStateSubject = appBridge.subscribe(subjectName, {
       next: (state) => {
         if (state !== null) {
@@ -72,23 +69,34 @@ app.controller('MainController', [
       },
     });
 
-    // Subscribe to changes from react-modules web component
     const sharedInviteSubject = appBridge.subscribe('sharedInvite', {
       next: (state) => {
         if (state !== null) {
           $scope.$applyAsync(() => {
+            console.log('invite updated');
             $scope.message = state.text;
           });
         }
       },
     });
 
-    // Clean up subscription on scope destroy
-    $scope.$on('$destroy', () => {
-      sharedStateSubject.unsubscribe();
+    const sharedDateRange = appBridge.subscribe('sharedDateRange', {
+      next: (state) => {
+        if (state !== null) {
+          $scope.$applyAsync(() => {
+            console.log('date updated', state);
+            $scope.dateRange = `${state.start} - ${state.end}`;
+          });
+        }
+      },
     });
 
-    // Function to update the shared state
+    $scope.$on('$destroy', () => {
+      sharedStateSubject.unsubscribe();
+      sharedInviteSubject.unsubscribe();
+      sharedDateRange.unsubscribe();
+    });
+
     $scope.updateSharedText = (newText: string) => {
       try {
         const newState = { ...$scope.sharedState, text: newText };
@@ -109,34 +117,5 @@ app.controller('MainController', [
         console.error('Error updating item:', error);
       }
     };
-
-    // date picker functions
-    $scope.datesSelected = ['begin'];
-    $scope.onDateChange = (date: string) => {
-      console.log('firing on Date change', date);
-      $scope.datesSelected.push(date);
-    };
   },
 ]);
-
-app.directive('webDatePickerWrapper', function () {
-  return {
-    restrict: 'E',
-    scope: {
-      initialDate: '@',
-      onDateChange: '&',
-    },
-    link: function (scope: IMainControllerScope, element) {
-      const datePickerElement = document.createElement('web-date-picker');
-      datePickerElement.setAttribute('initial-date', scope.initialDate);
-
-      // datePickerElement.onDateChange = function (event: CustomEvent) {
-      //   scope.$apply(function () {
-      //     scope.onDateChange({ date: event.detail });
-      //   });
-      // };
-
-      element.append(datePickerElement);
-    },
-  };
-});
