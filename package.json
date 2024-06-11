@@ -27,7 +27,7 @@
   "author": "Robert Long",
   "license": "ISC",
   "dependencies": {
-    "@mavrck-inc/react-modules": "file:mavrck-inc-react-modules-0.7.17.tgz",
+    "@mavrck-inc/react-modules": "file:../../mavrck-inc-react-modules-0.7.24.tgz",
     "@rob-long/app-bridge": "^1.1.0",
     "angular": "^1.6.9",
     "react": "^18.1.0",

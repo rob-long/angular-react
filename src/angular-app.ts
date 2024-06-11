@@ -1,11 +1,18 @@
 import angular from 'angular';
-
 import { createAppBridge } from '@rob-long/app-bridge';
-import { WebGreeting, WebInviteController } from '@mavrck-inc/react-modules';
+import {
+  WebGreeting,
+  WebInviteController,
+  WebDatePicker,
+} from '@mavrck-inc/react-modules';
 
 if (!customElements.get('web-greeting')) {
   customElements.define('web-greeting', WebGreeting);
   customElements.define('web-invite-controller', WebInviteController);
+}
+
+if (!customElements.get('web-date-picker')) {
+  customElements.define('web-date-picker', WebDatePicker);
 }
 
 // Define the initial state
@@ -14,16 +21,15 @@ interface IState {
   items: number[];
 }
 
-// Initialize the shared state
-const initialState: IState = {
-  text: 'Initial text',
-  items: [1, 2, 3],
-};
-
 export interface S4SubjectEntries {
   sharedState: IState | null;
   sharedInvite: { text: string } | null;
 }
+
+const initialState: IState = {
+  text: 'Initial text',
+  items: [1, 2, 3],
+};
 
 const appBridge = createAppBridge<S4SubjectEntries>();
 appBridge.updateSubject('sharedState', initialState);
@@ -35,6 +41,8 @@ interface IMainControllerScope extends angular.IScope {
   sharedState: IState;
   updateSharedText: (newText: string) => void;
   updateItem: (index: number, newValue: number) => void;
+  onDateChange: (date: string) => void;
+  datesSelected: string[];
 }
 
 app.controller('MainController', [
@@ -101,5 +109,34 @@ app.controller('MainController', [
         console.error('Error updating item:', error);
       }
     };
+
+    // date picker functions
+    $scope.datesSelected = ['begin'];
+    $scope.onDateChange = (date: string) => {
+      console.log('firing on Date change', date);
+      $scope.datesSelected.push(date);
+    };
   },
 ]);
+
+app.directive('webDatePickerWrapper', function () {
+  return {
+    restrict: 'E',
+    scope: {
+      initialDate: '@',
+      onDateChange: '&',
+    },
+    link: function (scope: IMainControllerScope, element) {
+      const datePickerElement = document.createElement('web-date-picker');
+      datePickerElement.setAttribute('initial-date', scope.initialDate);
+
+      // datePickerElement.onDateChange = function (event: CustomEvent) {
+      //   scope.$apply(function () {
+      //     scope.onDateChange({ date: event.detail });
+      //   });
+      // };
+
+      element.append(datePickerElement);
+    },
+  };
+});

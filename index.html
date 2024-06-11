@@ -102,13 +102,18 @@
       <h2>{{ sharedState.title }}</h2>
       <p>{{ sharedState.content }}</p>
 
+      <div>Date Picker:</div>
+      <web-date-picker ></web-date-picker>
+
+
+
 
       <div class="react-app">
         <react-component data="reactData" shared-text="sharedText">
         </react-component>
       </div>
 
-
+      <!-- Angular host -->
       <div class="angular-app">
         <input type="text" ng-model="sharedState.text" ng-change="updateSharedText(sharedState.text)" />
 
@@ -118,14 +123,22 @@
               ng-change="updateItem($index, sharedState.items[$index])" />
           </div>
         </div>
+
+        <div>Dates Selected so far</div>
+        <ul>
+          <li ng-repeat="item in datesSelected">{{ item }}</li>
+        </ul>
+
+        <div class="web-component">
+          <web-greeting name={{message}}></web-greeting>
+        </div>
+        <div class="web-component">
+          <web-invite-controller></web-invite-controller>
+        </div>
+
       </div>
 
-      <div class="web-component">
-        <web-greeting name={{message}}></web-greeting>
-      </div>
-      <div class="web-component">
-        <web-invite-controller></web-invite-controller>
-      </div>
+
     </div>
 
 
